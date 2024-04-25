@@ -257,9 +257,15 @@ function linkMediaAttributes(schema: Schema, fileEntry: FileEntry, { fileIdToDbI
     }
 
     if (isMediaAttribute(attribute)) {
-      attributeValue = castArray(attributeValue)
-        .map((id) => fileIdToDbId.getMapping('plugin::upload.file', id as number | string))
-        .filter(Boolean) as string[] | number[];
+      attributeValue = castArray(attributeValue);
+
+      if (attributeValue[0] instanceof string)
+        attributeValue
+          .map((id) =>
+            fileIdToDbId.getMapping("plugin::upload.file", id as string)
+          )
+          .filter(Boolean) as number[];
+
 
       if (!attribute.multiple) {
         attributeValue = attributeValue[0];
